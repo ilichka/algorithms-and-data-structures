@@ -3,22 +3,21 @@
 ## Here you can find following things:
 
 1. Algorithms 
-- Search
-- Sort
-- Recursion
-- Dijkstra's
-- Tree traversal
-- Cashing
-
+   - Search
+   - Sort
+   - Recursion
+   - Dijkstra's
+   - Tree traversal
+   - Cashing
 2. Structures
-- Arrays
-- Linked list
-- Queue
-- Set
-- Map
-- Binary tree
-- n-tree
-- Graphs
+   - Arrays
+   - Linked list
+   - Queue
+   - Set
+   - Map
+   - Binary tree
+   - n-tree
+   - Graphs
 
 First of all lets understand for what purpose we need algorithms. All algorithms can be described
 with `Big O` annotation. In `Big O` we always take the worst case.

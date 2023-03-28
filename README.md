@@ -186,8 +186,11 @@ Here we have pure difficulty O(n^2) without any coefficients.
 
 ## Quick sort
 
+Main concept there is divide adn concur. We divide array into 2 arrays and each time we 
+select a "pivot" on each array. Iterate an array and all elements, that are less move to left,
+other to right. Then do the same for each array. We will do it till the array length !== 1
 
-
+Here we have difficulty O(log(n)*n)
 
 ## Recursion
 
@@ -214,3 +217,130 @@ const fibonacci = (n) => {
 
 console.log(fibonacci(8))
 ```
+
+## Graphs
+
+Graph - a structure made of vertices and edges. Graph could be:
+1. Directed
+
+![](directed.svg)
+
+2. Undirected
+
+![](undirected.png)
+
+Graph can be represented as adjacency matrix. If we have way from 1 point to other 
+we add `1`, if not `0`.
+
+![](matrix.png)
+
+### Breadth-first search
+
+Find the shortest way from 1 point to the other.
+
+Here we describe graph in this way:
+- key === edge
+- value === array with connected edges
+
+```javascript
+const graph = {}
+graph.a = ['b', 'c']
+graph.b = ['f']
+graph.c = ['d', 'e']
+graph.d = ['f']
+graph.e = ['f']
+graph.f = ['g']
+
+function breadthSearch(graph, start, end) {
+    let queue = []
+    queue.push(start)
+    while (queue.length > 0) {
+        const current = queue.shift()
+        if (!graph[current]) {
+            graph[current] = []
+        }
+        if (graph[current].includes(end)) {
+            return true
+        } else {
+            queue = [...queue, ...graph[current]]
+        }
+    }
+    return false
+}
+
+console.log(breadthSearch(graph, 'a', 'e'))
+```
+
+This algorithm always will find the shortest way.
+
+### Dijkstra's algorithm
+
+As opposed to Breadth-first search here we consider the length of vertexes named `weight`.
+
+Workflow:
+1. Create a table where we have start point and all other points. Here we store all weights,
+that are accessible from the start point and the other as an `infinity`.
+![](dijkstra-1.png)
+2. Then we add mark already passed edges and add increase weight.
+![](dijkstra-2.png)
+3. Find shorter way to the point and rewrite the weight
+![](dijkstra-3.png)
+
+Here we have objects with weights.
+
+```javascript
+const graph = {}
+graph.a = {b: 2, c: 1}
+graph.b = {f: 7}
+graph.c = {d: 5, e: 2}
+graph.d = {f: 2}
+graph.e = {f: 1}
+graph.f = {g: 1}
+graph.g = {}
+
+function shortPath(graph, start, end) {
+    const costs = {}
+    const processed = []
+    let neighbors = {}
+    Object.keys(graph).forEach(node => {
+        if (node !== start) {
+            let value = graph[start][node]
+            costs[node] = value || Infinity
+        }
+    })
+    let node = findNodeLowestCost(costs, processed)
+    while (node) {
+        const cost = costs[node]
+        neighbors = graph[node]
+        Object.keys(neighbors).forEach(neighbor => {
+            let newCost = cost + neighbors[neighbor]
+            if (newCost < costs[neighbor]) {
+                costs[neighbor] = newCost
+            }
+        })
+        processed.push(node)
+        node = findNodeLowestCost(costs, processed)
+    }
+    return costs
+}
+
+
+function findNodeLowestCost(costs, processed) {
+    let lowestCost = Infinity
+    let lowestNode;
+    Object.keys(costs).forEach(node => {
+        let cost = costs[node]
+        if (cost < lowestCost && !processed.includes(node)) {
+            lowestCost = cost
+            lowestNode = node
+        }
+    })
+    return lowestNode
+}
+
+console.log(shortPath(graph, 'a', 'g'));
+```
+
+## Queue 
+
+FIFO - First In First Out. Always add element to the end and remove from the start.
